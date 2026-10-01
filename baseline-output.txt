@@ -1,0 +1,29 @@
+Experiment 1: identity
+  main 0: pid=7  ppid=2  thread id=7
+  thread 1: pid=7  ppid=2  thread id=8
+  thread 2: pid=7  ppid=2  thread id=9
+  thread 3: pid=7  ppid=2  thread id=10
+  process 1: pid=11  ppid=7  thread id=11
+  process 2: pid=12  ppid=7  thread id=12
+  process 3: pid=13  ppid=7  thread id=13
+
+Experiment 2: sharing   (process start method: fork)
+  inside the thread: SHARED = ['main', 'thread']
+  inside the process: SHARED = ['main', 'thread', 'process']
+  back in main: SHARED = ['main', 'thread']
+
+Experiment 3: CPU-bound work (8 tasks x 6,000,000 loop steps)
+  Python 3.12.14, global interpreter lock enabled: True, logical CPUs: 9
+  threads    workers=1  time=  2.97 s  speedup= 1.00
+  threads    workers=2  time=  2.96 s  speedup= 1.00
+  threads    workers=4  time=  2.92 s  speedup= 1.02
+  threads    workers=8  time=  2.92 s  speedup= 1.02
+  processes  workers=1  time=  2.85 s  speedup= 1.00
+  processes  workers=2  time=  1.61 s  speedup= 1.77
+  processes  workers=4  time=  0.94 s  speedup= 3.03
+  processes  workers=8  time=  0.52 s  speedup= 5.46
+  Amdahl: f from the 4-process speedup = 0.893; predicted 8-process speedup = 4.58; measured = 5.46
+
+Experiment 4: I/O-bound work (8 tasks, each waits 0.25 s)
+  threads    workers=1  time=  2.00 s
+  threads    workers=8  time=  0.25 s
