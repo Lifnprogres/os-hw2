@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Homework 2 Answers</title><style>body{max-width:1000px;margin:40px auto;padding:0 24px;font:16px/1.6 Arial;color:#17212b}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f7;padding:16px;font:14px/1.5 monospace}</style><h1>Homework 2 Answers</h1><p>Timing measurements were obtained in a hosted Linux environment. B-h uses the student’s Windows measurement: 8 threads.</p><h2>1(a)</h2><pre>Process | t=4 | t=9 | t=11 | t=14 | t=16
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Homework 2 Answers</title><style>body{max-width:1000px;margin:40px auto;padding:0 24px;font:16px/1.6 Arial;color:#17212b}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f7;padding:16px;font:14px/1.5 monospace}</style><h1>Homework 2 Answers</h1><p>Part B uses the student’s Windows measurements: Python 3.14.8, GIL enabled, 32 logical CPUs. The OS reported 8 threads in the separate thread-count experiment.</p><h2>1(a)</h2><pre>Process | t=4 | t=9 | t=11 | t=14 | t=16
 P1 | Blocked | Blocked/Suspend | Blocked/Suspend | Ready | Ready
 P2 | Running | Ready | Ready | Ready | Ready
 P3 | Ready | Running | Exit | Exit | Exit
@@ -20,59 +20,58 @@ The child computes 10+5=15. After waiting, the parent computes 10−3=7. fork() 
 B
 A
 The original creates a child, which creates a grandchild. The grandchild prints C and exits; the child waits, prints B and exits; the original waits and prints A. The waits guarantee this order if the forks succeed.</pre><h2>5(d)</h2><pre>The terminated child is a zombie until reaped. The kernel retains its PID, exit status, and accounting information for the parent to retrieve with wait(); ordinary memory and most resources are released.</pre><h2>6(a)</h2><pre>Pure ULT: when T1 blocks in read(), the whole process blocks, so T2–T4 cannot run; at most one thread executes at once; the user-space library schedules threads. Pure KLT: only T1 blocks; the others remain eligible; at most two execute at once on two cores; the kernel schedules threads.</pre><h2>6(b)</h2><pre>ULT: 1500×3 µs = 4500 µs = 0.0045 s per second; utilization = 0.0045×100 = 0.45%. KLT: 1500×45 µs = 67500 µs = 0.0675 s; utilization = 6.75%. Processes: 1500×700 µs = 1050000 µs = 1.05 s; utilization = 105%. Process creation alone exceeds one core’s capacity, so it cannot sustain this rate.</pre><h2>6(c)</h2><pre>Jacketing wraps potentially blocking calls with readiness checks or nonblocking operations. When an operation would block, the library runs another user-level thread, avoiding a block of the entire process.</pre><h2>7(a)</h2><pre>S=1/(0.15+0.85/N); E=S/N×100. N=2: S=1.74, E=86.96%; N=4: S=2.76, E=68.97%; N=8: S=3.90, E=48.78%; N=16: S=4.92, E=30.77%. Unlimited: S→1/0.15=6.67; efficiency blank. Efficiencies use unrounded speedups.</pre><h2>7(b)</h2><pre>1/3=1−f+f/4=1−3f/4, so f=8/9. S(12)=1/(1/9+(8/9)/12)=27/5=5.40. For S≥5: 9N/(N+8)≥5 → 9N≥5N+40 → N≥10. Smallest N=10.</pre><h2>7(c)</h2><pre>X: 1/(0.15+0.85/32)=5.66. Y: 1/(0.075+0.925/16)=7.53. Reducing the serial fraction helps more than doubling cores.</pre><h2>8(a)</h2><pre>clone(SIGCHLD): memory No, open-file table No, same thread group No. All five sharing flags: Yes, Yes, Yes. clone(CLONE_FILES | SIGCHLD): No, Yes, No. The first behaves like fork(); the second creates a thread. Linux represents both internally as tasks.</pre><h2>8(b)</h2><pre>Mail app currently used: 5, foreground. Photo-backup service: 3, service. Stopped game: 2, background. Process with no components: 1, empty. Partly visible map: 4, visible.</pre><h2>8(c)</h2><pre>The programmer submits task blocks or functions to dispatch queues. Grand Central Dispatch schedules them on system-managed worker threads. Reusing threads reduces per-task creation, destruction, memory, and scheduling overhead.</pre><h2>B-a</h2><pre>Experiment 1: identity
-  main 0: pid=7  ppid=2  thread id=7
-  thread 1: pid=7  ppid=2  thread id=8
-  thread 2: pid=7  ppid=2  thread id=9
-  thread 3: pid=7  ppid=2  thread id=10
-  process 1: pid=11  ppid=7  thread id=11
-  process 2: pid=12  ppid=7  thread id=12
-  process 3: pid=13  ppid=7  thread id=13
+  main 0: pid=41580  ppid=4476  thread id=25460
+  thread 1: pid=41580  ppid=4476  thread id=12088
+  thread 2: pid=41580  ppid=4476  thread id=38376
+  thread 3: pid=41580  ppid=4476  thread id=43772
+  process 1: pid=51556  ppid=41580  thread id=19596
+  process 2: pid=9712  ppid=41580  thread id=3812
+  process 3: pid=18348  ppid=41580  thread id=37036
 
-Experiment 2: sharing   (process start method: fork)
-  inside the thread: SHARED = [&#x27;main&#x27;, &#x27;thread&#x27;]
-  inside the process: SHARED = [&#x27;main&#x27;, &#x27;thread&#x27;, &#x27;process&#x27;]
-  back in main: SHARED = [&#x27;main&#x27;, &#x27;thread&#x27;]
+Experiment 2: sharing   (process start method: spawn)
+  inside the thread: SHARED = ['main', 'thread']
+  inside the process: SHARED = ['process']
+  back in main: SHARED = ['main', 'thread']
 
 Experiment 3: CPU-bound work (8 tasks x 6,000,000 loop steps)
-  Python 3.12.14, global interpreter lock enabled: True, logical CPUs: 9
-  threads    workers=1  time=  2.97 s  speedup= 1.00
-  threads    workers=2  time=  2.96 s  speedup= 1.00
-  threads    workers=4  time=  2.92 s  speedup= 1.02
-  threads    workers=8  time=  2.92 s  speedup= 1.02
-  processes  workers=1  time=  2.85 s  speedup= 1.00
-  processes  workers=2  time=  1.61 s  speedup= 1.77
-  processes  workers=4  time=  0.94 s  speedup= 3.03
-  processes  workers=8  time=  0.52 s  speedup= 5.46
-  Amdahl: f from the 4-process speedup = 0.893; predicted 8-process speedup = 4.58; measured = 5.46
+  Python 3.14.8, global interpreter lock enabled: True, logical CPUs: 32
+  threads    workers=1  time=  1.80 s  speedup= 1.00
+  threads    workers=2  time=  1.79 s  speedup= 1.01
+  threads    workers=4  time=  1.78 s  speedup= 1.01
+  threads    workers=8  time=  1.77 s  speedup= 1.02
+  threads    workers=16  time=  1.77 s  speedup= 1.02
+  processes  workers=1  time=  1.87 s  speedup= 1.00
+  processes  workers=2  time=  0.97 s  speedup= 1.92
+  processes  workers=4  time=  0.54 s  speedup= 3.46
+  processes  workers=8  time=  0.35 s  speedup= 5.37
+  processes  workers=16  time=  0.35 s  speedup= 5.36
+  Amdahl: f from the 4-process speedup = 0.949; predicted 8-process speedup = 5.88; measured = 5.37
 
 Experiment 4: I/O-bound work (8 tasks, each waits 0.25 s)
-  threads    workers=1  time=  2.00 s
+  threads    workers=1  time=  2.01 s
   threads    workers=8  time=  0.25 s
-</pre><h2>B-b</h2><pre>In the baseline run all three threads have pid=7 and ppid=2, but native thread IDs 8, 9, and 10 differ. The processes have PIDs 11, 12, and 13 and corresponding native thread IDs; all have ppid=7, the main process. The process owns resources and an address space, while its threads are separately dispatched within that address space.</pre><h2>B-c</h2><pre>The thread shares the main process&#x27;s global list, so its append is visible. A separate process changes its own memory. With fork, it inherits [&#x27;main&#x27;, &#x27;thread&#x27;], then prints [&#x27;main&#x27;, &#x27;thread&#x27;, &#x27;process&#x27;]; the main process still prints [&#x27;main&#x27;, &#x27;thread&#x27;].</pre><h2>B-d</h2><pre>threads    workers=1  time=  2.97 s  speedup= 1.00
-threads    workers=2  time=  2.96 s  speedup= 1.00
-threads    workers=4  time=  2.92 s  speedup= 1.02
-threads    workers=8  time=  2.92 s  speedup= 1.02
-processes  workers=1  time=  2.85 s  speedup= 1.00
-processes  workers=2  time=  1.61 s  speedup= 1.77
-processes  workers=4  time=  0.94 s  speedup= 3.03
-processes  workers=8  time=  0.52 s  speedup= 5.46</pre><h2>B-e</h2><pre>The GIL was enabled. Thread times stayed near 2.9 seconds, showing essentially no CPU speedup. Process time fell from 2.85 seconds to 0.52 seconds with eight workers. For pure Python CPU work the GIL-limited process resembles the one-at-a-time execution of pure ULTs, although its actual threads are kernel threads and blocking I/O need not stop them all. Each process has its own interpreter and GIL, so separate processes can compute on several cores.</pre><h2>B-f</h2><pre>Using the displayed 4-process speedup S=3.03: f=(1−1/S)/(1−1/4)=(1−1/3.03)/0.75=0.89329. Predicted S(8)=1/(1−0.89329+0.89329/8)=4.5779≈4.58. Measured S(8)=5.46. The program uses unrounded times, so its f may differ slightly. Two explanations are noisy CPU scheduling/clock speed between measurements and pool startup/communication overhead that does not scale as a fixed serial fraction. Nine reported logical CPUs do not guarantee nine equally fast, fully available physical cores.</pre><h2>B-g</h2><pre>One thread took 2.00 seconds; eight took 0.25 seconds. Ratio=2.00/0.25=8.00. A waiting thread blocks rather than calculating, so other threads can run and their waits overlap. The GIL is released during sleep, unlike the CPU loop, so threads help this waiting workload.</pre><h2>B-h</h2><pre>Command used:
+</pre><h2>B-b</h2><pre>The three threads have the same PID, 41580, and PPID, 4476, but different native thread IDs: 12088, 38376, and 43772. The three processes have different PIDs, 51556, 9712, and 18348, and different native thread IDs, 19596, 3812, and 37036. All three processes have PPID 41580, the main process. A process owns its address space and resources, while threads are independently dispatched units that share their process's resources.</pre><h2>B-c</h2><pre>The thread shares the main process's global list, so its append remains visible as ['main', 'thread']. Windows uses spawn, which starts the child with a fresh copy of the program and an empty SHARED list. Therefore the child prints ['process']. Its changes affect only its own address space, and the main list remains ['main', 'thread'].</pre><h2>B-d</h2><pre>  threads    workers=1  time=  1.80 s  speedup= 1.00
+  threads    workers=2  time=  1.79 s  speedup= 1.01
+  threads    workers=4  time=  1.78 s  speedup= 1.01
+  threads    workers=8  time=  1.77 s  speedup= 1.02
+  processes  workers=1  time=  1.87 s  speedup= 1.00
+  processes  workers=2  time=  0.97 s  speedup= 1.92
+  processes  workers=4  time=  0.54 s  speedup= 3.46
+  processes  workers=8  time=  0.35 s  speedup= 5.37</pre><h2>B-e</h2><pre>The GIL was enabled. Threads showed almost no CPU speedup: 1.80 seconds with one worker versus 1.77 seconds with eight workers, a reported speedup of 1.02. Processes improved from 1.87 seconds to 0.35 seconds, a reported speedup of 5.37. For CPU-bound Python code, GIL-limited execution resembles the one-at-a-time behavior of pure ULTs, although these are real kernel threads and blocking I/O can release the GIL. Each process has its own interpreter and GIL, so separate processes can execute Python computations on several cores.</pre><h2>B-f</h2><pre>Using the displayed four-process speedup S=3.46:
+f=(1−1/S)/(1−1/4)=(1−1/3.46)/0.75=0.947977≈0.948.
+Predicted S(8)=1/((1−0.947977)+0.947977/8)=5.8644≈5.86.
+The program reports f=0.949 and predicted speedup=5.88 because it uses unrounded timing measurements. Measured eight-process speedup=5.37, which is below the prediction. Pool startup, interprocess communication, and scheduling overhead do not necessarily follow a fixed serial fraction; background work and CPU frequency changes can also distort individual measurements. The system reports 32 logical CPUs, which are not necessarily 32 equally fast physical cores.</pre><h2>B-g</h2><pre>One thread took 2.01 seconds; eight threads took 0.25 seconds. Speedup from the displayed times = 2.01/0.25 = 8.04. The small difference from eight is timing overhead and rounding. A sleeping thread blocks and releases the GIL, allowing the kernel to schedule other threads while the waits overlap. This helps the waiting workload, whereas CPU-bound Python threads barely sped up because the GIL permits only one to execute Python code at once.</pre><h2>B-h</h2><pre>Command used:
 (Get-Process -Id 7088).Threads.Count
 
 Output:
 8
 
-Windows reported 8 threads. The program explicitly creates four waiting threads in addition to the main thread, accounting for five. The other three may be runtime or system-library helper threads. The thread count alone does not identify their exact purpose.</pre><h2>B-i</h2><pre>B-i prediction recorded before the modified run: Adding 16 workers while keeping 8 tasks should not improve CPU performance much beyond 8 workers, because at most 8 tasks can run simultaneously. More workers may add pool startup and scheduling overhead. GIL-enabled threads should still show little CPU speedup.
+Windows reported 8 threads. The program explicitly creates four waiting threads in addition to the main thread, accounting for five. The other three may be runtime or system-library helper threads. The thread count alone does not identify their exact purpose.</pre><h2>B-i</h2><pre>Change: WORKER_COUNTS = (1, 2, 4, 8, 16), marked with # B-i. Prediction: With only eight tasks, sixteen workers should not improve CPU performance substantially over eight workers because at most eight tasks can compute simultaneously. GIL-enabled threads should show little CPU speedup.
 
-Relevant modified output:
-  threads    workers=1  time=  2.60 s  speedup= 1.00
-  threads    workers=2  time=  2.71 s  speedup= 0.96
-  threads    workers=4  time=  2.72 s  speedup= 0.96
-  threads    workers=8  time=  2.94 s  speedup= 0.88
-  threads    workers=16  time=  2.91 s  speedup= 0.89
-  processes  workers=1  time=  2.84 s  speedup= 1.00
-  processes  workers=2  time=  1.71 s  speedup= 1.66
-  processes  workers=4  time=  0.95 s  speedup= 2.99
-  processes  workers=8  time=  0.54 s  speedup= 5.25
-  processes  workers=16  time=  0.49 s  speedup= 5.79
+Windows output:
+threads    workers=8   time=1.77 s  speedup=1.02
+threads    workers=16  time=1.77 s  speedup=1.02
+processes  workers=8   time=0.35 s  speedup=5.37
+processes  workers=16  time=0.35 s  speedup=5.36
 
-With processes, eight workers took 0.54 seconds and sixteen took 0.49 seconds, a roughly 9.3% improvement. The prediction of little improvement mostly held: only eight tasks can compute simultaneously, so sixteen does not double useful parallelism. Timing noise or pool scheduling can explain the small gain. Threads still did not speed up CPU work: sixteen took 2.91 seconds compared with 2.60 seconds for one.</pre></html>
+The prediction held. Sixteen workers did not improve the displayed time for either type. The process speedup decreased slightly from 5.37 to 5.36 because the program calculates speedups using unrounded measurements. Only eight tasks were available, so additional workers offered no useful extra parallelism.</pre></html>
